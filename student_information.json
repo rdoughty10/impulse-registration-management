@@ -1,0 +1,32 @@
+[
+    {
+        "StudentName": "Landon Doughty",
+        "StudentEmail": "",
+        "StudentSchool": "AOS",
+        "StudentAge": "12",
+        "Classes": "test-do-not-select",
+        "ParentName": "Ryan Doughty",
+        "ParentEmail": "ryandouglasdoughty@gmail.com",
+        "ParentPhoneNumber": "7136651880"
+    },
+    {
+        "StudentName": "Nora Doughty",
+        "StudentEmail": "ndoughty20@sjs.org",
+        "StudentSchool": "AOS",
+        "StudentAge": "12",
+        "Classes": "python-programming-session-a-911-am",
+        "ParentName": "Gary Doughty",
+        "ParentEmail": "rdoughty20@sjs.org",
+        "ParentPhoneNumber": "7136651880"
+    },
+    {
+        "StudentName": "Blake Doughty",
+        "StudentEmail": "bdoughty@gmail.com",
+        "StudentSchool": "West U",
+        "StudentAge": "10",
+        "Classes": "python-programming-session-a-911-am",
+        "ParentName": "Cara Doughty",
+        "ParentEmail": "ryandoughty1216@sjs.org",
+        "ParentPhoneNumber": "7136651880"
+    }
+]

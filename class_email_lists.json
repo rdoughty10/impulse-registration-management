@@ -1,0 +1,24 @@
+[
+    {
+        "Class": "test-do-not-select",
+        "Emails": [
+            [
+                "",
+                "ryandouglasdoughty@gmail.com"
+            ]
+        ]
+    },
+    {
+        "Class": "python-programming-session-a-911-am",
+        "Emails": [
+            [
+                "ndoughty20@sjs.org",
+                "rdoughty20@sjs.org"
+            ],
+            [
+                "bdoughty@gmail.com",
+                "ryandoughty1216@sjs.org"
+            ]
+        ]
+    }
+]
