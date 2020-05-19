@@ -3,7 +3,9 @@
         "Class": "test-do-not-select",
         "Emails": [
             [
-                "",
+                ""
+            ],
+            [
                 "ryandouglasdoughty@gmail.com"
             ]
         ]
@@ -13,10 +15,10 @@
         "Emails": [
             [
                 "ndoughty20@sjs.org",
-                "rdoughty20@sjs.org"
+                "bdoughty@gmail.com"
             ],
             [
-                "bdoughty@gmail.com",
+                "rdoughty20@sjs.org",
                 "ryandoughty1216@sjs.org"
             ]
         ]

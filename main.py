@@ -46,7 +46,6 @@ for student in studentInformation:
     studentClass = student['Classes']
     studentEmail = student['StudentEmail']
     parentEmail = student['ParentEmail']
-    parent_kid_emails = [studentEmail, parentEmail]
 
     #then find where that class is stored and store their email in it
     classFound = False
@@ -54,14 +53,21 @@ for student in studentInformation:
         specificClass = classEmailList['Class']
         if (specificClass == studentClass):
             classFound = True
-            classEmailList["Emails"].append(parent_kid_emails)
+            classEmailList["Emails"][0].append(studentEmail)
+            classEmailList["Emails"][1].append(parentEmail)
 
 
     #if class is not found in classes list of class email lists, create a new email list with the class title and add that to the classes list
     if (not classFound):
+        class_student_emails = []
+        class_student_emails.append(studentEmail)
+        class_parent_emails = []
+        class_parent_emails.append(parentEmail)
 
         class_emails = []
-        class_emails.append(parent_kid_emails)
+        class_emails.append(class_student_emails)
+        class_emails.append(class_parent_emails)
+
         classEmailList = {"Class": studentClass}
         classEmailList["Emails"] = class_emails
 
