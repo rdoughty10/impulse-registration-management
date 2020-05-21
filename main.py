@@ -4,6 +4,7 @@ import sys
 
 registration = sys.argv[1]
 
+
 with open(registration, 'r') as csv_file:
     csv_reader = csv.reader(csv_file)
 
@@ -26,7 +27,7 @@ with open(registration, 'r') as csv_file:
         studentInformation.append(student)
 
 #dump the student information data into json
-with open("student_information.json", "w") as write_file:
+with open("C:/Users/ryand/impulse-data/student_information.json", "w") as write_file:
     json.dump(studentInformation, write_file, indent=4)
 
 
@@ -36,7 +37,7 @@ all_student_emails = [sub['StudentEmail'] for sub in studentInformation]
 parent_and_student_emails = all_parent_emails + all_student_emails
 all_emails = {"Full Email List": parent_and_student_emails, "Parent Emails": all_parent_emails, "Student Emails": all_student_emails}
 
-with open("full_email_list.json", "w") as write_file2:
+with open("C:/Users/ryand/impulse-data/full_email_list.json", "w") as write_file2:
     json.dump(all_emails, write_file2, indent=4)
 
 
@@ -76,7 +77,7 @@ for student in studentInformation:
 print(classes)
 
 
-with open("class_email_lists.json", "w") as write_file3:
+with open("C:/Users/ryand/impulse-data/class_email_lists.json", "w") as write_file3:
     json.dump(classes, write_file3, indent=4)
 
 
