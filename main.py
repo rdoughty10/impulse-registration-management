@@ -1,9 +1,12 @@
 import csv
 import json 
 import sys
+import pandas as pd
+
+
+
 
 registration = sys.argv[1]
-
 
 with open(registration, 'r') as csv_file:
     csv_reader = csv.reader(csv_file)
@@ -11,25 +14,26 @@ with open(registration, 'r') as csv_file:
     next(csv_reader)
 
     studentInformation = []
+    studentInformationCSV = []
     for line in csv_reader:
         #get the data that I want
         parentName = line[1] + ' ' + line[2]
         parentEmail = line[9]
         parentPhoneNumber = line[10]
         classes = line[11]
-        studentName = line[13] + ' ' + line[14]
-        studentEmail = line[16]
-        studentAge = line[15]
-        studentSchool = line[17]
+        studentName = line[15] + ' ' + line[16]
+        studentEmail = line[18]
+        studentAge = line[17]
+        studentSchool = line[19]
 
         #array for adding to student record json
         student = {"StudentName": studentName, "StudentEmail": studentEmail, "StudentSchool": studentSchool, "StudentAge": studentAge, "Classes": classes, "ParentName": parentName, "ParentEmail": parentEmail, "ParentPhoneNumber": parentPhoneNumber}
         studentInformation.append(student)
 
-#dump the student information data into json
+
+#dump the student information data into json and csv file
 with open("C:/Users/ryand/impulse-data/student_information.json", "w") as write_file:
     json.dump(studentInformation, write_file, indent=4)
-
 
 #initiate full email list with two lists, parent and student
 all_parent_emails = [sub['ParentEmail'] for sub in studentInformation]
@@ -79,6 +83,19 @@ print(classes)
 
 with open("C:/Users/ryand/impulse-data/class_email_lists.json", "w") as write_file3:
     json.dump(classes, write_file3, indent=4)
+
+
+
+
+#later decided that I wanted to be able to import to excel so I converted the jsons back to csv using pandas
+df = pd.read_json ('C:/Users/ryand/impulse-data/student_information.json')
+df.to_csv ('C:/Users/ryand/impulse-data/student_information.csv', index = None)
+
+df2 = pd.read_json ('C:/Users/ryand/impulse-data/full_email_list.json')
+df2.to_csv ('C:/Users/ryand/impulse-data/full_email_list.csv', index = None)
+
+df3 = pd.read_json ('C:/Users/ryand/impulse-data/class_email_lists.json')
+df3.to_csv ('C:/Users/ryand/impulse-data/class_email_lists.csv', index = None)
 
 
 
