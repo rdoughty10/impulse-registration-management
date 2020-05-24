@@ -2,11 +2,47 @@ import csv
 import json 
 import sys
 import pandas as pd
+import imaplib
+import email
+import os
+import base64
 
+email_user = input('Email: ')
+email_pass = input('Password: ')
 
+mail = imaplib.IMAP4_SSL("imap.gmail.com", 993)
+mail.login(email_user, email_pass)
 
+mail.select("Inbox")
+mail.list()
+result, data = mail.uid('search', None, "ALL")
+inbox_item_list = data[0].split()
 
-registration = sys.argv[1]
+most_recent = inbox_item_list[-20:]
+
+for emails in most_recent:
+    result2, email_data = mail.uid('fetch', emails, '(RFC822)')
+    raw_email = email_data[0][1].decode("utf-8")
+    email_message = email.message_from_string(raw_email)
+    if (email_message['Subject'] == "Submissions data for Classes Payment"):
+
+        for part in email_message.walk():
+            # this part comes from the snipped I don't understand yet... 
+            if part.get_content_maintype() == 'multipart':
+                continue
+            if part.get('Content-Disposition') is None:
+                continue
+            fileName = part.get_filename()
+            if bool(fileName):
+                filePath = os.path.join('/Users/ryand/impulse-data/', fileName)
+                if not os.path.isfile(filePath) :
+                    fp = open(filePath, 'wb')
+                    fp.write(part.get_payload(decode=True))
+                    fp.close()
+                subject = str(email_message).split("Subject: ", 1)[1].split("\nTo:", 1)[0]
+                print("Downloaded " + fileName + " from email titled " + email_message['Subject'])
+
+registration = filePath
 
 with open(registration, 'r') as csv_file:
     csv_reader = csv.reader(csv_file)
@@ -85,19 +121,7 @@ with open("C:/Users/ryand/impulse-data/class_email_lists.json", "w") as write_fi
     json.dump(classes, write_file3, indent=4)
 
 
-
-
-#later decided that I wanted to be able to import to excel so I converted the jsons back to csv using pandas
-df = pd.read_json ('C:/Users/ryand/impulse-data/student_information.json')
-df.to_csv ('C:/Users/ryand/impulse-data/student_information.csv', index = None)
-
-df2 = pd.read_json ('C:/Users/ryand/impulse-data/full_email_list.json')
-df2.to_csv ('C:/Users/ryand/impulse-data/full_email_list.csv', index = None)
-
-df3 = pd.read_json ('C:/Users/ryand/impulse-data/class_email_lists.json')
-df3.to_csv ('C:/Users/ryand/impulse-data/class_email_lists.csv', index = None)
-
-
+#plan to add csv file support
 
 
 
