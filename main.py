@@ -7,42 +7,53 @@ import email
 import os
 import base64
 
-email_user = input('Email: ')
-email_pass = input('Password: ')
+def getFileFromEmail():
+    email_user = input('Email: ')
+    email_pass = input('Password: ')
+    filePath = ''
 
-mail = imaplib.IMAP4_SSL("imap.gmail.com", 993)
-mail.login(email_user, email_pass)
+    mail = imaplib.IMAP4_SSL("imap.gmail.com", 993)
+    mail.login(email_user, email_pass)
 
-mail.select("Inbox")
-mail.list()
-result, data = mail.uid('search', None, "ALL")
-inbox_item_list = data[0].split()
+    mail.select("Inbox")
+    mail.list()
+    result, data = mail.uid('search', None, "ALL")
+    inbox_item_list = data[0].split()
 
-most_recent = inbox_item_list[-20:]
+    subject = ''
+    emailLoc = -1
+    while (subject != "Submissions data for Classes Payment"):
+        emails = inbox_item_list[emailLoc]
+        result2, email_data = mail.uid('fetch', emails, '(RFC822)')
+        raw_email = email_data[0][1].decode("utf-8")
+        email_message = email.message_from_string(raw_email)
+        subject = email_message['Subject']
+        print("Testing email: ", subject)
+        if (subject == "Submissions data for Classes Payment"):
+            print("EMAIL FOUND")
 
-for emails in most_recent:
-    result2, email_data = mail.uid('fetch', emails, '(RFC822)')
-    raw_email = email_data[0][1].decode("utf-8")
-    email_message = email.message_from_string(raw_email)
-    if (email_message['Subject'] == "Submissions data for Classes Payment"):
+            for part in email_message.walk():
+                # this part comes from the snipped I don't understand yet... 
+                if part.get_content_maintype() == 'multipart':
+                    continue
+                if part.get('Content-Disposition') is None:
+                    continue
+                fileName = part.get_filename()
+                if bool(fileName):
+                    filePath = os.path.join('/Users/ryand/impulse-data/', fileName)
+                    print(filePath)
+                    if not os.path.isfile(filePath) :
+                        fp = open(filePath, 'wb')
+                        fp.write(part.get_payload(decode=True))
+                        fp.close()
+                    subject = str(email_message).split("Subject: ", 1)[1].split("\nTo:", 1)[0]
+                    print("Downloaded " + fileName + " from email titled " + email_message['Subject'])
+            break
+        emailLoc -= 1
+    return filePath
 
-        for part in email_message.walk():
-            # this part comes from the snipped I don't understand yet... 
-            if part.get_content_maintype() == 'multipart':
-                continue
-            if part.get('Content-Disposition') is None:
-                continue
-            fileName = part.get_filename()
-            if bool(fileName):
-                filePath = os.path.join('/Users/ryand/impulse-data/', fileName)
-                if not os.path.isfile(filePath) :
-                    fp = open(filePath, 'wb')
-                    fp.write(part.get_payload(decode=True))
-                    fp.close()
-                subject = str(email_message).split("Subject: ", 1)[1].split("\nTo:", 1)[0]
-                print("Downloaded " + fileName + " from email titled " + email_message['Subject'])
-
-registration = filePath
+registration = getFileFromEmail()
+print(registration)
 
 with open(registration, 'r') as csv_file:
     csv_reader = csv.reader(csv_file)
