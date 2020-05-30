@@ -40,7 +40,7 @@ def getFileFromEmail():
                     continue
                 fileName = part.get_filename()
                 if bool(fileName):
-                    filePath = os.path.join('/Users/ryand/impulse-data/', fileName)
+                    filePath = os.path.join('/Users/ryand/impulse-data/input_data/', fileName)
                     print(filePath)
                     if not os.path.isfile(filePath) :
                         fp = open(filePath, 'wb')
@@ -58,24 +58,44 @@ print(registration)
 with open(registration, 'r') as csv_file:
     csv_reader = csv.reader(csv_file)
 
-    next(csv_reader)
-
+    #next(csv_reader)
+    
+    first = True
     studentInformation = []
     studentInformationCSV = []
     for line in csv_reader:
-        #get the data that I want
-        parentName = line[1] + ' ' + line[2]
-        parentEmail = line[9]
-        parentPhoneNumber = line[10]
-        classes = line[11]
-        studentName = line[15] + ' ' + line[16]
-        studentEmail = line[18]
-        studentAge = line[17]
-        studentSchool = line[19]
+        if first:
+            for index in range(len(line)):
+                print(line[index])
+                if (line[index] == "First Name"): parentFirstNameIndex = index
+                if (line[index] == "Last Name"): parentLastNameIndex = index
+                if (line[index] == "Email Address"): parentEmailIndex = index
+                if (line[index] == "Phone"): parentPhoneIndex = index
+                if (line[index] == "Classes "):classesIndex = index
+                if (line[index] == "Student First Name"): studentFirstNameIndex = index
+                if (line[index] == "Student Last Name"): studentLastNameIndex = index
+                if (line[index] == "Student Age"): studentAgeIndex = index
+                if (line[index] == "Student Email Address (if available)"): studentEmailIndex = index
+                if (line[index] == "Student's school"): studentSchoolIndex = index
+                #if (line[index] == "First Name"): parentFirstNameIndex = index
+                #if (line[index] == "First Name"): parentFirstNameIndex = index
+                #if (line[index] == "First Name"): parentFirstNameIndex = index
 
-        #array for adding to student record json
-        student = {"StudentName": studentName, "StudentEmail": studentEmail, "StudentSchool": studentSchool, "StudentAge": studentAge, "Classes": classes, "ParentName": parentName, "ParentEmail": parentEmail, "ParentPhoneNumber": parentPhoneNumber}
-        studentInformation.append(student)
+            first = False 
+        else:
+            #get the data that I want
+            parentName = line[parentFirstNameIndex] + ' ' + line[parentLastNameIndex]
+            parentEmail = line[parentEmailIndex]
+            parentPhoneNumber = line[parentPhoneIndex]
+            classes = line[classesIndex]
+            studentName = line[studentFirstNameIndex] + ' ' + line[studentLastNameIndex]
+            studentEmail = line[studentEmailIndex]
+            studentAge = line[studentAgeIndex]
+            studentSchool = line[studentSchoolIndex]
+
+            #array for adding to student record json
+            student = {"StudentName": studentName, "StudentEmail": studentEmail, "StudentSchool": studentSchool, "StudentAge": studentAge, "Classes": classes, "ParentName": parentName, "ParentEmail": parentEmail, "ParentPhoneNumber": parentPhoneNumber}
+            studentInformation.append(student)
 
 
 #dump the student information data into json and csv file
